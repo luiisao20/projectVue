@@ -1,8 +1,6 @@
 <template>
-  <nav class="navbar">
-    <img src="./assets/logo.svg" alt="" width="50">
-    <div class="brand">Todo List App</div>
-  </nav>
+
+  <Navbar />
 
   <main class="container">
     <Alert
@@ -11,12 +9,11 @@
       @close="showAlert = false"
       type="info"
     />
-    <form class="add-todo-form">
-      <input v-model="todoTitle" type="text" placeholder="Todo Title" />
-      <div>
-        <button @click.prevent="addTodo">Add Todo</button>
-      </div>
-    </form>
+
+    <section>
+      <AddTodoForm @submit="addTodo"/>
+    </section>
+
     <section>
       <div v-for="todo in todos" class="todo" :key="todo.id">
         <p>{{ todo.title }}</p>
@@ -29,12 +26,16 @@
 </template>
 
 <script>
+import AddTodoForm from './components/AddTodoForm.vue';
 import Alert from './components/Alert.vue';
+import Navbar from './components/Navbar.vue'
 
 export default {
   components: {
     Alert,
-  },
+    Navbar,
+    AddTodoForm
+},
   data() {
     return {
       todoTitle: '',
@@ -43,13 +44,13 @@ export default {
     }
   },
   methods: {
-    addTodo(e) {
-      if (this.todoTitle === '') {
+    addTodo(title) {
+      if (title === '') {
         this.showAlert = true;
         return
       }
       this.todos.push({
-        title: this.todoTitle,
+        title,
         id: Math.floor(Math.random() * 1000)
       });
     },
@@ -62,34 +63,6 @@ export default {
 </script>
 
 <style scoped>
-.navbar {
-  display: flex;
-  background: var(--navbar-color);
-  align-items: center;
-  padding: 20px;
-  margin-bottom: 30px;
-}
-
-.brand {
-  font-size: 2rem;
-}
-
-.add-todo-form {
-  display: flex;
-  justify-content: space-between;
-}
-
-.add-todo-form input {
-  width: 80%;
-  border: solid 2px var(--accent-color);
-}
-
-.add-todo-form button {
-  background: var(--accent-color);
-  color: var(--text-color);
-  border: none;
-  height: 50px;
-}
 
 .todo {
   display: flex;
