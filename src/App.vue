@@ -13,14 +13,11 @@
     <section>
       <AddTodoForm @submit="addTodo"/>
     </section>
-
     <section>
-      <div v-for="todo in todos" class="todo" :key="todo.id">
-        <p>{{ todo.title }}</p>
-        <div>
-          <button @click="removeTodo(todo)" class="remove-todo-btn">&times;</button>
-        </div>
-      </div>
+      <AddTodo 
+        @remove="removeTodo" 
+        :todos="todos"
+      />
     </section>
   </main>
 </template>
@@ -28,13 +25,15 @@
 <script>
 import AddTodoForm from './components/AddTodoForm.vue';
 import Alert from './components/Alert.vue';
-import Navbar from './components/Navbar.vue'
+import Navbar from './components/Navbar.vue';
+import AddTodo from './components/AddTodo.vue';
 
 export default {
   components: {
     Alert,
     Navbar,
-    AddTodoForm
+    AddTodoForm,
+    AddTodo,
 },
   data() {
     return {
@@ -55,8 +54,8 @@ export default {
       });
     },
 
-    removeTodo(todoTitle) {
-      this.todos = this.todos.filter(todo => todo !== todoTitle)
+    removeTodo(id) {
+      this.todos = this.todos.filter(todo => todo.id !== id)
     }
   }
 }
@@ -64,24 +63,4 @@ export default {
 
 <style scoped>
 
-.todo {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: var(--accent-color);
-  margin-top: 30px;
-  padding: 0 20px 0 20px;
-  border-radius: 10px;
-}
-
-.remove-todo-btn {
-  border-radius: 50%;
-  border: none;
-  height: 40px;
-  width: 40px;
-  font-size: 30px;
-  color: var(--text-color);
-  background: var(--danger-color);
-  cursor: pointer;
-}
 </style>
