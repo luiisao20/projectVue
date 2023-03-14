@@ -2,7 +2,7 @@
   <Navbar />
 
   <main class="container">
-    <Modal :show="editTodoForm.show">
+    <Modal :show="editTodoForm.show" @close="editTodoForm.show = false">
       <template #header>
         <h2>Edit Todo</h2>
       </template>
@@ -83,7 +83,6 @@ export default {
     },
 
     showEditTodoForm(todo){
-      console.log(todo.title);
       this.editTodoForm.show = true;
       this.editTodoForm.todo = {...todo};
     },
