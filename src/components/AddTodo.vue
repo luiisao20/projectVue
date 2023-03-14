@@ -3,7 +3,7 @@
         <p>{{ todo.title }}</p>
         <div>
             <Btn 
-                @click="$emit('remove', todo.id)" 
+                @click="$emit('edit', todo)" 
                 class="btn edit-todo-btn"
                 circle
                 type="secondary"
@@ -33,7 +33,7 @@ export default {
             type: Array
         },
     },
-    emits: ["remove"],
+    emits: ["remove", 'edit'],
 }
 </script>
 
