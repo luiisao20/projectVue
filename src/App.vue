@@ -33,14 +33,18 @@
     />
 
     <section>
-      <AddTodoForm @submit="addTodo" />
+      <AddTodoForm @submit="addTodo" :isLoading="isPostingTodo"/>
     </section>
+
     <section>
-      <AddTodo 
-        @remove="removeTodo" 
-        :todos="todos" 
-        @edit="showEditTodoForm"
-      />
+      <Spinner v-if="isLoading"/>
+      <div v-else>
+        <AddTodo 
+          @remove="removeTodo" 
+          :todos="todos" 
+          @edit="showEditTodoForm"
+        />
+      </div>
     </section>
   </main>
 </template>
@@ -53,6 +57,7 @@ import AddTodo from './components/AddTodo.vue';
 import Modal from './components/Modal.vue';
 import Btn from './components/Btn.vue';
 import axios from 'axios';
+import Spinner from './components/Spinner.vue'
 
 export default {
   components: {
@@ -61,7 +66,8 @@ export default {
     AddTodoForm,
     AddTodo,
     Modal,
-    Btn
+    Btn,
+    Spinner
   },
   data() {
     return {
@@ -72,6 +78,8 @@ export default {
         message: '',
         variant: 'danger'
       },
+      isLoading: false,
+      isPostingTodo: false,
       editTodoForm:{
         show: false,
         todo: {
@@ -88,13 +96,14 @@ export default {
 
   methods: {
     async fetchTodos (){
+      this.isLoading = true;
       try{
         const res = await axios.get('http://localhost:8080/todos');
         this.todos = await res.data;
       } catch (e){
-        this.showAlert('Failed loading database', 'warning')
+        this.showAlert('Failed loading database', 'warning');
       }
-
+      this.isLoading = false;
     },
 
     showAlert(message, variant = 'danger'){
@@ -109,9 +118,13 @@ export default {
         return
       }
 
+      this.isPostingTodo = true;
+
       const res = await axios.post('http://localhost:8080/todos', {
         title
       });
+
+      this.isPostingTodo = false;
       this.todos.push(res.data);
     },
 

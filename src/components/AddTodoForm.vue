@@ -6,16 +6,27 @@
                 @click.prevent="$emit('submit', todoTitle)"
                 type="submit"
                 class="btn"
-            >Add Todo</Btn>
+                :disabled="isLoading"
+            >
+                <Spinner v-if="isLoading"/>
+                <span v-else>Add Todo</span>
+            </Btn>
         </div>
     </form>
 </template>
 
 <script>
 import Btn from './Btn.vue';
+import Spinner from './Spinner.vue';
 
 export default {
-    components: { Btn },
+    components: { Btn, Spinner },
+    props:{
+        isLoading: {
+            default: false,
+            type: Boolean
+        },
+    },
     data() {
         return {
             todoTitle: "",
