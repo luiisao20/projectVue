@@ -133,12 +133,21 @@ export default {
       this.editTodoForm.todo = {...todo};
     },
 
-    updateTodo(){
-      const todo = this.todos.find(
-        (todo) => todo.id === this.editTodoForm.todo.id
-      );
-      todo.title = this.editTodoForm.todo.title;
+    async updateTodo(){
+      const {title, id} = this.editTodoForm.todo
+      if(title === '') {
+        this.showAlert('Title required, todo not changed')
+        this.editTodoForm.show = false;
+        return
+      };
+      try {
+        await axios.put(`/api/todos/${id}`, {title})
+        this.todos = (await axios.get('/api/todos')).data
+      } catch (e){
+        this.showAlert('Failed updating, something went wrong with the db :(')
+      }
       this.editTodoForm.show = false;
+      this.alert.show = false;
     },
 
     async removeTodo(id) {
