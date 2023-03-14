@@ -3,7 +3,8 @@
         <input v-model="todoTitle" type="text" placeholder="Todo Title" />
         <div>
             <Btn 
-                @click="$emit('submit', todoTitle)"
+                @click.prevent="$emit('submit', todoTitle)"
+                type="submit"
                 class="btn"
             >Add Todo</Btn>
         </div>

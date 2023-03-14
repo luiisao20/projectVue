@@ -6,7 +6,7 @@
                 @click="$emit('edit', todo)" 
                 class="btn edit-todo-btn"
                 circle
-                type="secondary"
+                variant="secondary"
             >
             <Pencil />
         </Btn>
@@ -14,7 +14,7 @@
                 @click="$emit('remove', todo.id)" 
                 class="btn"
                 circle
-                type="danger"
+                variant="danger"
             >
             &times;</Btn>
         </div>
