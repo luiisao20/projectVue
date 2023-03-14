@@ -20,7 +20,7 @@ export default {
       required: true,
       type: Boolean,
     },
-    type: {
+    variant: {
       required: false,
       default: 'danger',
       validator(value){
@@ -37,7 +37,7 @@ export default {
         warning: 'var(--warning-color)'
       }
 
-      return options[this.type];
+      return options[this.variant];
     }
   },
 
