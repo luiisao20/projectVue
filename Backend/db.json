@@ -1,12 +1,3 @@
 {
-  "todos": [
-    {
-      "title": "Test A",
-      "id": 1
-    },
-    {
-      "title": "Test C",
-      "id": 3
-    }
-  ]
+  "todos": []
 }
