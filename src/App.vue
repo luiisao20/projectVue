@@ -113,4 +113,5 @@ async function removeTodo(id) {
 
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>
