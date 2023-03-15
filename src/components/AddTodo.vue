@@ -3,15 +3,15 @@
         <p>{{ todo.title }}</p>
         <div>
             <Btn 
-                @click="$emit('edit', todo)" 
+                @click="edit(todo)"
                 class="btn edit-todo-btn"
                 circle
                 variant="secondary"
             >
             <Pencil />
         </Btn>
-            <Btn 
-                @click="$emit('remove', todo.id)" 
+            <Btn
+                @click="remove(todo.id)" 
                 class="btn"
                 circle
                 variant="danger"
@@ -21,19 +21,27 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import Btn from './Btn.vue';
-import Pencil from './icons/pencil.vue'
+import Pencil from './icons/pencil.vue';
 
-export default {
-    components: { Btn, Pencil },
-    props: {
-        todos: {
-            required: true,
-            type: Array
-        },
+const props = defineProps({
+    todos:{
+        required: true,
+        type: Array
     },
-    emits: ["remove", 'edit'],
+});
+
+console.log(props.todos);
+
+const emit = defineEmits(['remove', 'edit'])
+
+function remove(id){
+    emit('remove', id)
+}
+
+function edit(todo){
+    emit('edit', todo)
 }
 </script>
 
