@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { onBeforeMount, onMounted, reactive, ref } from 'vue';
+import { onBeforeMount, onMounted, ref } from 'vue';
 
 const modal = ref(null)
 
@@ -31,35 +31,34 @@ const props = defineProps({
     }
 });
 
+const emit = defineEmits(['close']);
+
 function close(){
     emit('close')
-}
+};
 
-const clickListener = reactive({
-    function(e) {
-        if (e.target === modal) {
-            close()
-        }
+const clickListener = (e) => {
+    if (e.target === modal) {
+        close()
     }
-})
+    
+};
 
-const closeOnEscapeListener = reactive({
-    function(e) {
-        if (e.key === 'Escape') {
-            close()
-        }
+const closeOnEscapeListener = (e) => {
+    if (e.key === 'Escape') {
+        close()
     }
-})
+};
 
 onMounted(() => {
     window.addEventListener('click', clickListener)
     window.addEventListener('keydown', closeOnEscapeListener)
-})
+});
 
 onBeforeMount(() => {
     window.removeEventListener('click', clickListener)
     window.removeEventListener('keydown', closeOnEscapeListener)
-})
+});
 </script>
 
 <style scoped>
