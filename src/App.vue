@@ -10,8 +10,13 @@
       v-model="editTodoForm.todo.title" 
     />
 
-    <Alert :message="alert.message" :show="alert.show" :variant="alert.variant" @close="alert.show = false"
-      type="danger" />
+    <Alert 
+      :message="alert.message" 
+      :show="alert.show" 
+      :variant="alert.variant" 
+      @close="alert.show = false"
+      type="danger" 
+    />
 
     <section>
       <AddTodoForm @submit="addTodo" :isLoading="isPostingTodo" />
@@ -34,16 +39,14 @@ import AddTodo from './components/AddTodo.vue';
 import axios from 'axios';
 import Spinner from './components/Spinner.vue'
 import EditTodoForm from './components/EditTodoForm.vue';
-import { reactive } from 'vue';
-import { ref } from 'vue';
+import { useFetch } from './composables/fetch'
+import { reactive, ref } from 'vue';
 
-const todos = ref([]);
 const alert = reactive({
   show: false,
   message: '',
   variant: 'danger'
 });
-const isLoading = ref(false);
 const isPostingTodo = ref(false);
 const editTodoForm = reactive({
   show: false,
@@ -53,7 +56,9 @@ const editTodoForm = reactive({
   }
 });
 
-fetchTodos();
+const { data: todos, isLoading } = useFetch('/api/todos', {
+  onError: () => showAlert('Failed loading todos')
+});
 
 function showEditTodoForm(todo) {
   editTodoForm.show = true;
@@ -64,17 +69,6 @@ function showAlert(message, variant = 'danger') {
   alert.show = true;
   alert.message = message;
   alert.variant = variant;
-}
-
-async function fetchTodos() {
-  isLoading.value = true;
-  try {
-    const res = await axios.get('/api/todos');
-    todos.value = res.data;
-  } catch (e) {
-    showAlert('Failed loading database', 'warning');
-  }
-  isLoading.value = false;
 }
 
 async function addTodo(title) {
