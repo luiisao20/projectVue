@@ -32,8 +32,6 @@ const props = defineProps({
     },
 });
 
-console.log(props.todos);
-
 const emit = defineEmits(['remove', 'edit'])
 
 function remove(id){

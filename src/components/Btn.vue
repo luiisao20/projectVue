@@ -1,32 +1,47 @@
 <template>
     <button 
-    class="btn"
+        class="btn" 
         :style="{ backgroundColor }" 
-        :class="{ circular: applyCircleClass }"
+        :class="{ circular: applyCircleClass }" 
         v-bind="$attrs"
     >
         <slot />
     </button>
 </template>
 
-<script>
-import { backgroundColor } from '../mixins/backgroundColor.js';
-export default {
-    mixins:[backgroundColor],
+<script setup>
+import { computed } from 'vue';
 
-    props: {
-                
-        circle:{
-            default: false,
-            type: Boolean
+const props = defineProps({
+    variant: {
+        required: false,
+        default: 'success',
+        validator(value) {
+            const options = ['danger', 'warning', 'info', 'success', 'secondary']
+
+            return options.includes(value);
         }
     },
-    computed: {
-        applyCircleClass(){
-            return this.circle;
-        }
-    },
-}
+    circle: {
+        default: false,
+        type: Boolean
+    }
+});
+
+const backgroundColor = computed(() => {
+    const options = {
+        danger: 'var(--danger-color)',
+        info: 'var(--info-color)',
+        warning: 'var(--warning-color)',
+        success: 'var(--accent-color)',
+        secondary: 'var(--secondary-color)',
+    }
+    return options[props.variant];
+})
+
+const applyCircleClass = computed(() => {
+    return props.circle;
+})
 </script>
 
 <style scoped>
@@ -39,7 +54,7 @@ export default {
     align-items: center;
 }
 
-.btn:disabled{
+.btn:disabled {
     opacity: 80%;
 }
 

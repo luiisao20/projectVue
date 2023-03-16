@@ -9,52 +9,57 @@
             </div>
 
             <div class="modal-body">
-                <slot name="content"/>
+                <slot name="content" />
             </div>
 
             <div class="modal-footer">
                 <slot name="footer" />
-            </div>            
+            </div>
         </div>
 
     </div>
 </template>
 
-<script>
-export default {
-    props: {
-        show: {
-            default: false,
-        }
-    }, 
+<script setup>
+import { onBeforeMount, onMounted, reactive, ref } from 'vue';
 
-    data(){
-        return{
-            clickListener: (e) => {
-                if(e.target === this.$refs.modal){
-                this.$emit('close');
-                }
-            },
-            closeOnEscapeListener: (e) => {
-                if(e.key === 'Escape'){
-                    this.$emit('close');
-                }
-            }
-        }
-    },
+const modal = ref(null)
 
-    emits: ['close'],
-
-    mounted() {
-        window.addEventListener('click', this.clickListener)
-        window.addEventListener('keydown', this.closeOnEscapeListener)
-    },
-
-    beforeUnmount(){
-        window.removeEventListener('click', this.clickListener)
-        window.removeEventListener('keydown', this.closeOnEscapeListener)
+const props = defineProps({
+    show: {
+        default: false,
     }
+});
+
+function close(){
+    emit('close')
 }
+
+const clickListener = reactive({
+    function(e) {
+        if (e.target === modal) {
+            close()
+        }
+    }
+})
+
+const closeOnEscapeListener = reactive({
+    function(e) {
+        if (e.key === 'Escape') {
+            close()
+        }
+    }
+})
+
+onMounted(() => {
+    window.addEventListener('click', clickListener)
+    window.addEventListener('keydown', closeOnEscapeListener)
+})
+
+onBeforeMount(() => {
+    window.removeEventListener('click', clickListener)
+    window.removeEventListener('keydown', closeOnEscapeListener)
+})
 </script>
 
 <style scoped>

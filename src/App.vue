@@ -3,8 +3,12 @@
 
   <main class="container">
 
-    <EditTodoForm :show="editTodoForm.show" @close="editTodoForm.show = false" @submit="updateTodo"
-      v-model="editTodoForm.todo.title" />
+    <EditTodoForm 
+      :show="editTodoForm.show" 
+      @close="editTodoForm.show = false" 
+      @submit="updateTodo"
+      v-model="editTodoForm.todo.title" 
+    />
 
     <Alert :message="alert.message" :show="alert.show" :variant="alert.variant" @close="alert.show = false"
       type="danger" />

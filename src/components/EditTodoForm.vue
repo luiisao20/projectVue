@@ -1,5 +1,5 @@
 <template>
-    <Modal :show="show" @close="$emit('close')">
+    <Modal :show="show" @close="close">
         <template #header>
             <h2>Edit Todo</h2>
         </template>
@@ -12,15 +12,21 @@
                 <input 
                     type="text" 
                     :value="modelValue" 
-                    @input="$emit('update:modelValue', $event.target.value)" 
+                    @input="update"
                 />
             </form>
         </template>
 
         <template #footer>
             <div class="edit-todo-modal-footer">
-                <Btn class="edit-todo-submit-btn" @click="$emit('submit')">Submit</Btn>
-                <Btn variant="danger" @click="$emit('close')">
+                <Btn 
+                    class="edit-todo-submit-btn" 
+                    @click="submit"
+                >Submit</Btn>
+                <Btn 
+                    variant="danger" 
+                    @click="close"
+                >
                     Close
                 </Btn>
             </div>
@@ -28,22 +34,26 @@
     </Modal>
 </template>
 
-<script>
+<script setup>
 
 import Modal from './Modal.vue'
 import Btn from './Btn.vue';
 
-export default{
-    components:{
-        Modal,
-        Btn
-    },
+const props = defineProps(['modelValue', 'show'])
 
-    props: ['modelValue', 'show'],
+const emit = defineEmits(['close', 'submit', 'update:modelValue'])
 
-    emits:['close', 'submit', 'update:modelValue']
+function close(){
+    emit('close')
 }
 
+function submit(){
+    emit('submit')
+}
+
+function update(e){
+    emit('update:modelValue', e.target.value)
+}
 </script>
 
 <style scoped>
