@@ -9,13 +9,10 @@
       @submit="updateTodo"
       v-model="editTodoForm.todo.title" 
     />
-
+<!-- Alerta con el v-bind, muy util! -->
     <Alert 
-      :message="alert.message" 
-      :show="alert.show" 
-      :variant="alert.variant" 
+      v-bind="alert"
       @close="alert.show = false"
-      type="danger" 
     />
 
     <section>
@@ -41,12 +38,8 @@ import Spinner from './components/Spinner.vue'
 import EditTodoForm from './components/EditTodoForm.vue';
 import { useFetch } from './composables/fetch'
 import { reactive, ref } from 'vue';
+import { useAlert } from './composables/alert';
 
-const alert = reactive({
-  show: false,
-  message: '',
-  variant: 'danger'
-});
 const isPostingTodo = ref(false);
 const editTodoForm = reactive({
   show: false,
@@ -56,8 +49,12 @@ const editTodoForm = reactive({
   }
 });
 
+const { alert, showAlert } = useAlert();
+
 const { data: todos, isLoading } = useFetch('/api/todos', {
-  onError: () => showAlert('Failed loading todos')
+  onError: () => {
+    showAlert('Something went wrong with the database');
+  }
 });
 
 function showEditTodoForm(todo) {
@@ -65,15 +62,9 @@ function showEditTodoForm(todo) {
   editTodoForm.todo = { ...todo };
 }
 
-function showAlert(message, variant = 'danger') {
-  alert.show = true;
-  alert.message = message;
-  alert.variant = variant;
-}
-
 async function addTodo(title) {
   if (title === '') {
-    showAlert('Todo title is required')
+    showAlert('Todo title required')
     return
   }
 
@@ -90,7 +81,7 @@ async function addTodo(title) {
 async function updateTodo() {
   const { title, id } = editTodoForm.todo
   if (title === '') {
-    showAlert('Title required, todo not changed')
+    showAlert('Title required, todo not changed');
     editTodoForm.show = false;
     return
   };
@@ -98,7 +89,9 @@ async function updateTodo() {
     await axios.put(`/api/todos/${id}`, { title })
     todos.value = (await axios.get('/api/todos')).data
   } catch (e) {
-    showAlert('Failed updating, something went wrong with the db :(')
+    showAlert('Failed updating, something went wrong with the db :(');
+    editTodoForm.show = false;
+    return
   }
   editTodoForm.show = false;
   alert.show = false;

@@ -8,7 +8,9 @@ function useFetch(url, options = { onError:null }) {
 
     let stopErrorWatcher = null;
     if(options.onError) {
-        const stopErrorWatcher = watch(error, (e) => options.onError(e));
+        const stopErrorWatcher = watch(
+            error, (e) => 
+            options.onError(e));
     }
 
     axios.get(url)
