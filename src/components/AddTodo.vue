@@ -3,7 +3,7 @@
         <p>{{ todo.title }}</p>
         <div>
             <Btn 
-                @click="edit(todo)"
+                @click="$router.push(`/todos/${todo.id}/edit`)"
                 class="btn edit-todo-btn"
                 circle
                 variant="secondary"
@@ -39,6 +39,7 @@ function remove(id){
 }
 
 function edit(todo){
+    console.log(todo);
     emit('edit', todo)
 }
 </script>
